@@ -36,4 +36,51 @@ Launching a VPC might take some time.
 
 ![image](https://github.com/Coder-Rushabh/VPC-with-Public-Private-Subnet/assets/47267236/ba4f53e7-e5de-4f06-89fa-a2c532b0cb34)
 
+<hr>
+
+### Step 2: Create Auto Scaling Group
+
+Before creating an Auto Scaling Group, we need to create a Launch Template.
+- Select Ubuntu OS Image with default configuration.
+- Don't select subnet.
+- Create a security group.
+  
+  ![image](https://github.com/Coder-Rushabh/VPC-with-Public-Private-Subnet/assets/47267236/e07714f7-4d54-4a69-a8d4-f5e1c99a599a)
+
+- Create Launch template.
+- Now, Launch an Auto Scaling Group with our template.
+- In the network setting, Select a VPC and private subnets.
+  
+  ![image](https://github.com/Coder-Rushabh/VPC-with-Public-Private-Subnet/assets/47267236/884145da-87b1-47c2-b0b3-8ceb2091c5ea)
+
+- We will not create a Load balancer now, will create it later.
+- We specify Desired, Min, and Max capacity as 2, 1, and 4 respectively.
+
+Till now, our two EC2 instances are running in each private subnet. They will not have a public IP. So to communicate with them we will create a Bastion host.
+
+A bastion host is a server whose purpose is to provide access to a private network from an external network, such as the Internet.
+
+Launch manually an EC2 instance with Ubuntu OS.
+
+![image](https://github.com/Coder-Rushabh/VPC-with-Public-Private-Subnet/assets/47267236/ee9ce5a4-e1bf-4c84-838c-bc0c7c5d8618)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
