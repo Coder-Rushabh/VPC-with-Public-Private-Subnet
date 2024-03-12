@@ -48,6 +48,8 @@ Before creating an Auto Scaling Group, we need to create a Launch Template.
   ![image](https://github.com/Coder-Rushabh/VPC-with-Public-Private-Subnet/assets/47267236/e07714f7-4d54-4a69-a8d4-f5e1c99a599a)
 
 - Create Launch template.
+
+Search for EC2 and in the EC2 dashboard scroll down on the left-hand side there will be the option for ‘Auto Scaling Group’.
 - Now, Launch an Auto Scaling Group with our template.
 - In the network setting, Select a VPC and private subnets.
   
@@ -55,6 +57,13 @@ Before creating an Auto Scaling Group, we need to create a Launch Template.
 
 - We will not create a Load balancer now, will create it later.
 - We specify Desired, Min, and Max capacity as 2, 1, and 4 respectively.
+
+Before creating the Application Load Balancer, the application need to be installed on the servers. In order to do that we will ssh into the instances and install it.
+In order to do that we must first create a Bastion Host as we did not provide our instances with a public IP address.
+
+<hr>
+
+### Step 3: Create a Bastion host
 
 Till now, our two EC2 instances are running in each private subnet. They will not have a public IP. So to communicate with them we will create a Bastion host.
 
@@ -64,13 +73,68 @@ Launch manually an EC2 instance with Ubuntu OS.
 
 ![image](https://github.com/Coder-Rushabh/VPC-with-Public-Private-Subnet/assets/47267236/ee9ce5a4-e1bf-4c84-838c-bc0c7c5d8618)
 
+<hr>
+
+### Step 4: SSH into the Bastion Host
+
+We are going to communicate to instances in a private subnet through the Bastion host. For that, we will need a key-pair file (.pem file) in the Bastion host. 
+To copy the .pem file from our PC to the Bastion host run the following command in CMD.
+
+![image](https://github.com/Coder-Rushabh/VPC-with-Public-Private-Subnet/assets/47267236/4ba9da7e-3b35-4e12-b801-fa971d07f82f)
 
 
+Now log into bastion host and run the command:
+
+![image](https://github.com/Coder-Rushabh/VPC-with-Public-Private-Subnet/assets/47267236/31d00bfe-88b1-4d49-8905-82a951cab7ae)
+
+Check whether the .pem file is successfully copied into bastion host by entering <code>ls</code>
+
+Now to log into the private instance, enter the following command into the Bastion host
+
+``` ssh -i bastion.pem ubuntu@<private IP> ```
+
+<b>Note:</b> If you get a prompt saying <code>Unprotected Private Key File </code> it means that the permission to the file is to open and that needs to be changed.
+To do this run:
+
+```chmod 400 instancelogin.pem```
+
+#### We are Logged In
+
+<hr>
+
+### Step 4: Create a Web Page
+
+1. First create an html page by running
+
+```vim index.html```
+
+2. Create a simple HTML file here.
+
+3. Launch the Python server by running
+
+```python3 -m http.server 8000```
+
+The application is now running in one of the instances in the private subnet.
 
 
+<hr> 
 
+### Step 5: Create an Application Load Balancer
 
+Now we only logged into one instance as we are using the load balancer to demonstrate that traffic is going to only one instance and we are receiving the response, whereas if it goes to another instance we will get an error response as the application is not available there.
 
+Go to the EC2 Dashboard in the AWS Console and select Load Balancer.
+
+- Make it Internet-facing and in both public subnets.
+
+- Create a target group on port 8000.
+
+## Conclusion:
+Our Website is running on a private subnet on port 8000.
+
+We can access our website by hitting on the DNS address of our Load Balancer, which is accepting traffic on port 80.
+
+It will redirect traffic from port 80 to port 8000.
 
 
 
